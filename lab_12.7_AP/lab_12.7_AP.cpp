@@ -1,0 +1,86 @@
+// lab_12.7_AP.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+#include <iostream>
+#include <string>
+using namespace std;
+
+struct Elem {
+    Elem* next;
+    string teamName;
+    int points;
+};
+
+int main() {
+    Elem* head = nullptr;
+    int n;
+    cout << "Enter the numbers of teams: ";
+    cin >> n;
+    for (int i = 0; i < n; i++) {
+        string name;
+        int points;
+        cout << "Enter the name of teams: ";
+        cin >> name;
+        cout << "Enter the number of points ";
+        cin >> points;
+        Elem* newElem = new Elem{ head, name, points };
+        head = newElem;
+    }
+    
+    cout << " First list of teams:" << endl;
+    for (Elem* p = head; p != nullptr; p = p->next) {
+        cout << p->teamName << " " << p->points << endl;
+    }
+    
+    int stage = 0;
+    while (n > 1) {
+        stage++;
+        cout << "Stages " << stage << ":" << endl;
+
+        
+        int half = n / 2;
+
+        for (int i = 0; i < half; i++) {
+            Elem* minElem = head;
+            Elem* prevMinElem = nullptr;
+            for (Elem* p = head, *prevP = nullptr; p != nullptr; prevP = p, p = p->next) {
+                if (p->points < minElem->points) {
+                    minElem = p;
+                    prevMinElem = prevP;
+                }
+            }
+
+            
+            cout << "Deleted: " << minElem->teamName << " " << minElem->points << endl;
+            if (prevMinElem == nullptr) {
+                head = minElem->next;
+            }
+            else {
+                prevMinElem->next = minElem->next;
+            }
+            delete minElem;
+
+            n--;
+        }
+
+        
+        cout << "Teams that stayed:" << endl;
+        for (Elem* p = head; p != nullptr; p = p->next) {
+            cout << p->teamName << " " << p->points << endl;
+        }
+    }
+    cout << "Winner: " << head->teamName << " " << head->points << endl;
+    cout << "The number of stages: " << stage << endl;
+
+    return 0;
+}
+// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
+// Debug program: F5 or Debug > Start Debugging menu
+
+// Tips for Getting Started: 
+//   1. Use the Solution Explorer window to add/manage files
+//   2. Use the Team Explorer window to connect to source control
+//   3. Use the Output window to see build output and other messages
+//   4. Use the Error List window to view errors
+//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
+//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
