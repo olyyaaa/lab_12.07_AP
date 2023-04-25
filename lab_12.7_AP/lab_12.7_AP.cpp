@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <fstream>
 using namespace std;
 
 struct Elem {
@@ -14,30 +15,54 @@ struct Elem {
 int main() {
     Elem* head = nullptr;
     int n;
-    cout << "Enter the numbers of teams: ";
-    cin >> n;
-    for (int i = 0; i < n; i++) {
-        string name;
-        int points;
-        cout << "Enter the name of teams: ";
-        cin >> name;
-        cout << "Enter the number of points ";
-        cin >> points;
-        Elem* newElem = new Elem{ head, name, points };
-        head = newElem;
+
+    cout << "Enter 1 to input teams from a file or 2 to input teams from the console: ";
+    int choice;
+    cin >> choice;
+
+    if (choice == 1) {
+        string filename = "D://teams.txt";
+        ifstream file(filename);
+        if (!file.is_open()) {
+            cerr << "Error opening file" << endl;
+            return -1;
+        }
+        file >> n;
+        for (int i = 0; i < n; i++) {
+            string name;
+            int points;
+            file >> name >> points;
+            Elem* newElem = new Elem{ head, name, points };
+            head = newElem;
+        }
+        file.close();
     }
-    
+    else if (choice == 2) {
+        cout << "Enter the numbers of teams: ";
+        cin >> n;
+        for (int i = 0; i < n; i++) {
+            string name;
+            int points;
+            cout << "Enter the name of teams: ";
+            cin >> name;
+            cout << "Enter the number of points ";
+            cin >> points;
+            Elem* newElem = new Elem{ head, name, points };
+            head = newElem;
+        }
+    }
+
     cout << " First list of teams:" << endl;
     for (Elem* p = head; p != nullptr; p = p->next) {
         cout << p->teamName << " " << p->points << endl;
     }
-    
+
     int stage = 0;
     while (n > 1) {
         stage++;
         cout << "Stages " << stage << ":" << endl;
 
-        
+
         int half = n / 2;
 
         for (int i = 0; i < half; i++) {
@@ -50,7 +75,7 @@ int main() {
                 }
             }
 
-            
+
             cout << "Deleted: " << minElem->teamName << " " << minElem->points << endl;
             if (prevMinElem == nullptr) {
                 head = minElem->next;
@@ -63,7 +88,7 @@ int main() {
             n--;
         }
 
-        
+
         cout << "Teams that stayed:" << endl;
         for (Elem* p = head; p != nullptr; p = p->next) {
             cout << p->teamName << " " << p->points << endl;
@@ -74,13 +99,3 @@ int main() {
 
     return 0;
 }
-// Run program: Ctrl + F5 or Debug > Start Without Debugging menu
-// Debug program: F5 or Debug > Start Debugging menu
-
-// Tips for Getting Started: 
-//   1. Use the Solution Explorer window to add/manage files
-//   2. Use the Team Explorer window to connect to source control
-//   3. Use the Output window to see build output and other messages
-//   4. Use the Error List window to view errors
-//   5. Go to Project > Add New Item to create new code files, or Project > Add Existing Item to add existing code files to the project
-//   6. In the future, to open this project again, go to File > Open > Project and select the .sln file
